@@ -1,18 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Task Manager</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const API = "http://backend:8080";
 
-  <h1>Task Manager</h1>
+// Fetch all tasks
+async function fetchTasks() {
+  try {
+    const res = await fetch(`${API}/tasks`);
+    const data = await res.json();
 
-  <input id="taskInput" placeholder="Enter task" />
-  <button onclick="addTask()">Add</button>
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
 
-  <ul id="taskList"></ul>
+    data.forEach(task => {
+      const li = document.createElement("li");
+      li.textContent = task.title;
+      list.appendChild(li);
+    });
 
-  <script src="app.js"></script>
-</body>
-</html>
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+  }
+}
+
+// Add new task
+async function addTask() {
+  const input = document.getElementById("taskInput");
+
+  if (!input.value) return;
+
+  try {
+    await fetch(`${API}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ title: input.value })
+    });
+
+    input.value = "";
+    fetchTasks();
+
+  } catch (err) {
+    console.error("Error adding task:", err);
+  }
+}
+
+// Load tasks on page load
+fetchTasks();

@@ -1,5 +1,4 @@
-const API = "http://backend:8080";
-
+const API = "http://localhost:8080";
 // Fetch all tasks
 async function fetchTasks() {
   try {

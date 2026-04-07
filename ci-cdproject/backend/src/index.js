@@ -1,35 +1,44 @@
-import express from "express";
-import { db } from "./db.js";
-import cors from "cors";
-import dotenv from "dotenv";
+const API = "http://backend:8080";
 
-dotenv.config();
+async function fetchTasks() {
+  try {
+    const res = await fetch(`${API}/tasks`);
+    const data = await res.json();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
 
-app.get("/", (req, res) => {
-  res.send("Backend running 🚀");
-});
+    data.forEach(task => {
+      const li = document.createElement("li");
+      li.textContent = task.title;
+      list.appendChild(li);
+    });
 
-app.get("/tasks", (req, res) => {
-  db.query("SELECT * FROM tasks", (err, data) => {
-    if (err) return res.status(500).json(err);
-    return res.json(data);
-  });
-});
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+  }
+}
 
-app.post("/tasks", (req, res) => {
-  const q = "INSERT INTO tasks (`title`) VALUES (?)";
-  const values = [req.body.title];
+async function addTask() {
+  const input = document.getElementById("taskInput");
 
-  db.query(q, values, (err, data) => {
-    if (err) return res.status(500).json(err);
-    return res.json({ message: "Task created" });
-  });
-});
+  if (!input.value) return;
 
-app.listen(8080, () => {
-  console.log("Backend running on port 8080");
-});
+  try {
+    await fetch(`${API}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ title: input.value })
+    });
+
+    input.value = "";
+    fetchTasks();
+
+  } catch (err) {
+    console.error("Error adding task:", err);
+  }
+}
+
+fetchTasks();

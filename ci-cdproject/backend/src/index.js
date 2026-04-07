@@ -9,12 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* -------- HEALTH CHECK -------- */
 app.get("/", (req, res) => {
-  res.send("Backend running 🚀");
+  res.send("Backend running!!");
 });
 
-/* -------- GET TASKS -------- */
 app.get("/tasks", (req, res) => {
   db.query("SELECT * FROM tasks", (err, data) => {
     if (err) {
@@ -25,7 +23,6 @@ app.get("/tasks", (req, res) => {
   });
 });
 
-/* -------- ADD TASK -------- */
 app.post("/tasks", (req, res) => {
   const { title } = req.body;
 
@@ -44,9 +41,8 @@ app.post("/tasks", (req, res) => {
   });
 });
 
-/* -------- START SERVER -------- */
 const PORT = 8080;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

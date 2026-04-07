@@ -1,6 +1,5 @@
 const API = "http://localhost:8080";
 
-// Fetch tasks
 async function fetchTasks() {
   const res = await fetch(`${API}/tasks`);
   const data = await res.json();
@@ -15,7 +14,6 @@ async function fetchTasks() {
   });
 }
 
-// Add task
 async function addTask() {
   const input = document.getElementById("taskInput");
 
@@ -33,8 +31,6 @@ async function addTask() {
   fetchTasks();
 }
 
-// Initial load
 fetchTasks();
 
-// 🔥 IMPORTANT (fix for button click)
 window.addTask = addTask;

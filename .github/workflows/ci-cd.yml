@@ -58,7 +58,7 @@ jobs:
           sleep 5
 
       - name: test-api
-        run: curl https://localhost:8080/tasks
+        run: curl http://localhost:8080/tasks
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
